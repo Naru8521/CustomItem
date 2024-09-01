@@ -1,10 +1,10 @@
 # CustomItem
 
-![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/Naruru-Addon/CustomItem/total) ![GitHub Downloads (all assets, latest release)](https://img.shields.io/github/downloads/Naruru-Addon/CustomItem/latest/total?color=green) ![GitHub Release](https://img.shields.io/github/v/release/Naruru-Addon/CustomItem)
+![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/Naru8521/CustomItem/total) ![GitHub Downloads (all assets, latest release)](https://img.shields.io/github/downloads/Naru8521/CustomItem/latest/total?color=green) ![GitHub Release](https://img.shields.io/github/v/release/Naru8521/CustomItem)
 
 カスタムしたアイテムを作成します
 
-アドオンのダウンロードは[コチラ](https://github.com/Naruru-Addon/CustomItem/releases)
+アドオンのダウンロードは[コチラ](https://github.com/Naru8521/CustomItem/releases)
 
 クラフターズコロニーは[コチラ](https://minecraft-mcworld.com/92101/)
 
