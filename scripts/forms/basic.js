@@ -4,34 +4,35 @@ import MenuForm from "./menu";
 
 /**
  * @param {Player} player 
- * @param {import("../types").PresetConfig} preset
+ * @param {ItemConfig} itemConfig
  */
-export default async function BasicForm(player, preset) {
-    const basic = preset.basic;
+export default async function BasicForm(player, itemConfig) {
+    // フォームを初期化
     const form = new UI.ModalFormData();
 
-    form.title("基本設定");
-    form.textField("アイテムID §c*§f", "minecraft:apple", basic.id);
-    form.textField("アイテム名", "", basic.nameTag);
-    form.textField("アイテムロア", "", basic.lore.join(","));
-    form.textField("アイテム数 §c*§f\n,で区切る", "1,2,3", basic.amounts.join(","));
+    // フォームを作成
+    form.title("基本情報");
+    form.textField("アイテムID", "minecraft:stick", itemConfig.id);
+    form.textField("アイテム名", "", itemConfig.nameTag);
+    form.textField("アイテムロア (,で区切る)", "", itemConfig.lore.join(","));
+    form.textField("アイテム数", "", `${itemConfig.amount}`);
+    form.textField("アイテム数 (ランダム) (,で区切る)", "", itemConfig.amounts.join(","));
     form.submitButton("設定");
 
+    // フォームを表示
     const { formValues, canceled } = await form.show(player);
 
-    if (canceled) return await MenuForm(player, preset);
+    // フォームをキャンセルする
+    if (canceled) return await MenuForm(player, itemConfig);
 
-    const id = formValues[0].trim();
-    const nameTag = formValues[1].trim();
-    const lore = formValues[2].trim() === "" ? [] : formValues[2].trim().split(",");
-    const amounts = formValues[3].trim() === "" ? [1] : formValues[3].trim().split(",").map(amount => {
-        return Number.isNaN(parseInt(amount)) ? 1 : parseInt(amount) >= 1 ? parseInt(amount) : 1
-    });
+    // itemConfigをセット
+    const id = formValues[0];
+    const nameTag = formValues[1];
+    const lore = formValues[2].trim() !== "" ? formValues[2].split(",") : [];
+    const amount = isNaN(Number(formValues[3])) ? 1 : Number(formValues[3]);
+    const amounts = formValues[4].trim() !== "" ? formValues[4].split(",").map(v => Number(v)) : [];
+    itemConfig = { ...itemConfig, id, nameTag, lore, amount, amounts };
 
-    basic.id = id;
-    basic.nameTag = nameTag;
-    basic.lore = lore;
-    basic.amounts = amounts;
-
-    await MenuForm(player, preset);
+    // メニューフォームへ戻る
+    await MenuForm(player, itemConfig);
 }

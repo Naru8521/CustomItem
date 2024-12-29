@@ -1,49 +1,52 @@
-/** @type {import("./types").CommandConfig} */
-export const commandConfig = {
-    prefix: "ci",
-    ids: [
-        "g:i",
-        "s:i"
-    ],
-    tags: ["op"]
-}
+import { ItemLockMode } from "@minecraft/server";
 
-/** @type {import("./types").PresetConfig} */
-export const presetConfig = {
-    type: "g:i",
-    basic: {
-        id: "",
-        nameTag: "",
-        lore: [],
-        amounts: [
-            1
-        ]
+/** @type {import("./libs/commandHandler").CommandsPath} */
+export const commandsPath = "../commands";
+
+/** @type {import("./libs/commandHandler").CommandSetting} */
+export const commandSetting = {
+    prefixs: ["ci"],
+    ids: ["c:i"]
+};
+
+/** @type {import("./libs/commandHandler").Commands} */
+export const commands = [
+    {
+        name: "create",
+        tags: ["op"]
     },
-    detail: {
-        canPlaceOn: [],
-        canDestory: [],
-        keepOnDeath: false,
-        lockMode: "none",
-        gi: {
-            drop: true
-        },
-        si: {
-            slot: 0,
-            overwrite: true,
-            drop: true 
-        }
+    {
+        name: "edit",
+        tags: ["op"]
+    },
+    {
+        name: "run",
+        tags: ["op"]
+    },
+    {
+        name: "help"
     }
-}
+];
 
-/** @type {import("./types").Types} */
-export const types = [
+/** @type {CustomItemType[]} */
+export const customItemTypes = [
     "g:i",
     "s:i"
-]
+];
 
-/** @type {import("./types").LockModes} */
-export const lockModes = [
-    "none",
-    "inventory",
-    "slot"
-]
+/** @type {ItemConfig} */
+export const ItemConfigDef = {
+    type: "g:i",
+    id: "",
+    nameTag: "",
+    lore: [],
+    amount: 1,
+    amounts: [],
+    enchants: [],
+    canPlaceOn: [],
+    canDestory: [],
+    keepOnDeath: false,
+    lockMode: ItemLockMode.none,
+    slot: -1,
+    overwrite: false
+};

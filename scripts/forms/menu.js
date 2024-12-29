@@ -1,55 +1,47 @@
 import { Player } from "@minecraft/server";
 import * as UI from "@minecraft/server-ui";
-import * as util from "../util";
+import { ObjectUtil } from "../utils/objectUtil";
+import { ItemConfigDef } from "../config";
+import { Util } from "../utils/util";
 import TypeForm from "./type";
 import BasicForm from "./basic";
 import DetailForm from "./detail";
-import GenerateForm from "./generate";
+import EnchantsListForm from "./enchants/list";
+import GenCommandForm from "./gen_command";
 
 /**
  * @param {Player} player 
- * @param {import("../types").PresetConfig} preset
- * @param {string?} err
+ * @param {ItemConfig | undefined} itemConfig
  */
-export default async function MenuForm(player, preset, err) {
-    const type = preset.type;
-    const basic = preset.basic;
+export default async function MenuForm(player, itemConfig) {
+    // フォームを初期化
     const form = new UI.ActionFormData();
 
-    form.title("メニュー");
+    // itemConfigを初期化
+    if (!itemConfig) itemConfig = ObjectUtil.duplication(ItemConfigDef);
+
+    // フォームを作成
+    form.title("アイテム作成メニュー");
     form.body([
-        `${err ? `§c${err}§f\n` : ""}タイプ: ${type}`,
-        `アイテムID: ${basic.id}`,
-        `アイテム数: ${basic.amounts}`
+        `type: ${itemConfig.type}`,
+        `id: ${itemConfig.id}`
     ].join("\n"));
-    form.button("§lタイプ設定");
-    form.button("§l基本設定");
-    form.button("§l詳細設定");
-    form.button("§l§aコマンド生成");
+    form.button("§lタイプ変更");
+    form.button("§l基本情報");
+    form.button("§l応用情報");
+    form.button("§lエンチャント");
+    form.button("§l§aコマンドを作成");
 
-    const { selection, canceled } = await util.formBusy(player, form);
+    // フォームを表示
+    const { selection, canceled } = await Util.formBusy(player, form);
 
+    // フォームをキャンセルする
     if (canceled) return;
 
-    switch (selection) {
-        case 0:
-            await TypeForm(player, preset);
-            break;
-
-        case 1:
-            await BasicForm(player, preset);
-            break;
-
-        case 2:
-            await DetailForm(player, preset);
-            break;
-
-        case 3:
-            await GenerateForm(player, preset);
-            break;
-
-        default:
-            player.sendMessage("§cエラー: 不正な選択が行われました");
-            break;
-    }
+    // ボタンが選択された時
+    if (selection === 0) return await TypeForm(player, itemConfig);
+    if (selection === 1) return await BasicForm(player, itemConfig);
+    if (selection === 2) return await DetailForm(player, itemConfig);
+    if (selection === 3) return await EnchantsListForm(player, itemConfig);
+    if (selection === 4) return await GenCommandForm(player, itemConfig);
 }

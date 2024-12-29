@@ -1,93 +1,47 @@
-import { Player } from "@minecraft/server";
+import { EnchantmentSlot, EnchantmentTypes, ItemLockMode, Player } from "@minecraft/server";
 import * as UI from "@minecraft/server-ui";
 import MenuForm from "./menu";
-import { lockModes } from "../config";
-/// <reference path="../types.js" />
 
 /**
  * @param {Player} player 
- * @param {import("../types").PresetConfig} preset
+ * @param {ItemConfig} itemConfig
  */
-export default async function DetailForm(player, preset) {
-    const type = preset.type;
-    const detail = preset.detail;
+export default async function DetailForm(player, itemConfig) {
+    // フォームを初期化
     const form = new UI.ModalFormData();
 
-    form.title("詳細設定");
-    form.textField("設置可能ブロックIds\n,で区切る", "minecraft:stone,minecraft:grass", detail.canPlaceOn.join(","));
-    form.textField("破壊可能ブロックIds\n,で区切る", "minecraft:stone,minecraft:grass", detail.canDestory.join(","));
-    form.toggle("アイテム保持", detail.keepOnDeath);
-    form.dropdown("ロックモード", lockModes, lockModes.indexOf(detail.lockMode));
-    
-    switch (type) {
-        case "g:i":
-            const gi = detail.gi;
+    // フォームを作成
+    form.title("応用情報");
+    form.textField("置けるブロックID (,で区切る)", "minecraft:stone,minecraft:grass...", itemConfig.canPlaceOn.join(","));
+    form.textField("壊せるブロックID (,で区切る)", "minecraft:stone,minecraft:grass...", itemConfig.canDestory.join(","));
+    form.toggle("死亡時にキープ", itemConfig.keepOnDeath);
+    form.dropdown("ロックモード", Object.values(ItemLockMode), Object.values(ItemLockMode).findIndex(value => value === itemConfig.lockMode));
+    form.submitButton("設定");
 
-            form.toggle("インベントリに空きがない時にドロップ", gi.drop);
-            break;
-
-        case "s:i":
-            const si = detail.si;
-
-            form.textField("セットスロット §c*", "0", `${si.slot}`);
-            form.toggle("上書き", si.overwrite);
-            form.toggle("インベントリに空きがない時にドロップ", si.drop);
-            break;
-
-        default:
-            break;
+    if (itemConfig.type === "s:i") {
+        form.textField("セットスロット", "0", `${itemConfig.slot}`);
+        form.toggle("上書き", itemConfig.overwrite);
     }
 
+    // フォームを表示
     const { formValues, canceled } = await form.show(player);
 
-    if (canceled) return await MenuForm(player, preset);
+    // フォームをキャンセルする
+    if (canceled) return await MenuForm(player, itemConfig);
 
-    const canPlaceOn = formValues[0].trim() === "" ? [] : formValues[0].trim().split(",");
-    const canDestory = formValues[1].trim() === "" ? [] : formValues[1].trim().split(",");
+    // itemConfigをセット
+    const canPlaceOn = formValues[0].trim() !== "" ? formValues[0].split(",") : [];
+    const canDestory = formValues[1].trim() !== "" ? formValues[1].split(",") : [];
     const keepOnDeath = formValues[2];
-    const lockMode = lockModes[formValues[3]];
-    let drop = false;
-    let slot = 0;
-    let overwrite = false;
+    const lockMode = Object.keys(ItemLockMode)[formValues[3]];
+    itemConfig = { ...itemConfig, canPlaceOn, canDestory, keepOnDeath, lockMode };
 
-    switch (type) {
-        case "g:i":
-            drop = formValues[4];
-            break;
-
-        case "s:i":
-            slot = parseInt(formValues[4]) ?? 0;
-            overwrite = formValues[5];
-            drop = formValues[6];
-            break;
-
-        default:
-            break;
+    if (itemConfig.type === "s:i") {
+        const slot = isNaN(Number(formValues[4])) ? 0 : Number(formValues[4]);
+        const overwrite = formValues[5];
+        itemConfig = { ...itemConfig, slot, overwrite };
     }
 
-    detail.canPlaceOn = canPlaceOn;
-    detail.canDestory = canDestory;
-    detail.keepOnDeath = keepOnDeath;
-    detail.lockMode = lockMode;
-
-    switch (type) {
-        case "g:i":
-            const gi = detail.gi;
-
-            gi.drop = drop;
-            break;
-
-        case "s:i":
-            const si = detail.si;
-
-            si.slot = slot;
-            si.overwrite = overwrite;
-            si.drop = drop;
-            break;
-
-        default:
-            break;
-    }
-
-    await MenuForm(player, preset);
+    // メニューフォームへ戻る
+    await MenuForm(player, itemConfig);
 }

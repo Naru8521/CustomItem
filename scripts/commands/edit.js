@@ -1,67 +1,27 @@
-import { Player } from "@minecraft/server";
+import { Block, Entity, Player } from "@minecraft/server";
 import MenuForm from "../forms/menu";
-import * as config from "../config";
+import CustomItem from "../libs/CustomItem";
 
 /**
- * @param {Player} player
- * @param {string[]} args
+ * コマンド実行時の処理を行う
+ * @param {string[]} args - コマンド引数
+ * @param {{ player?: Player, entity?: Entity, initiator?: Entity, block?: Block }} ev - イベント情報
  */
-export async function run(player, args) {
-    const preset = JSON.parse(JSON.stringify(config.presetConfig));
-    let json = null;
+export async function run(args, ev) {
+    const { player } = ev;
+
+    if (!player) return;
+
+    const itemConfig = CustomItem.generateItemConfig(args[0]);
+
+    if (!itemConfig) {
+        player.sendMessage("§cエラー: itemConfigの構築に失敗しました。");
+        return;
+    }
 
     try {
-        if (args[0] === "/scriptevent" && config.types.includes(args[1])) {
-            json = JSON.parse(args[2]);
-            preset.type = args[1];
-        } else {
-            json = JSON.parse(args[0]);
-            preset.type = "g:i";
-        }
-
-        if (json) {
-            preset.basic = getBasicConfig(json);
-            preset.detail = getDetailConfig(json);
-
-            await MenuForm(player, preset);
-        } else {
-            player.sendMessage("§cエラー: 無効なJSONデータです");
-        }
-    } catch (e) {
-        player.sendMessage("§cエラー: JSONのパースに失敗しました");
+        await MenuForm(player, itemConfig);
+    } catch (error) {
+        player.sendMessage(`§cエラー: メニューを表示中に問題が発生しました。 (${error.message})`);
     }
-}
-
-/**
- * @param {object} json
- * @returns {object}
- */
-function getBasicConfig(json) {
-    return {
-        id: json.id ?? "",
-        nameTag: json.nameTag ?? "",
-        lore: json.lore ?? [],
-        amounts: json.amounts.length > 0 ? json.amounts : 1
-    };
-}
-
-/**
- * @param {object} json
- * @returns {object}
- */
-function getDetailConfig(json) {
-    return {
-        canPlaceOn: json.canPlaceOn ?? [],
-        canDestory: json.canDestory ?? [],
-        keepOnDeath: typeof json.keepOnDeath === "boolean" ? json.keepOnDeath : false,
-        lockMode: config.lockModes.includes(json.lockMode) ? json.lockMode : "none",
-        gi: {
-            drop: typeof json.drop === "boolean" ? json.drop : false
-        },
-        si: {
-            slot: typeof json.slot === "number" ? json.slot : 0,
-            overwrite: typeof json.overwrite === "boolean" ? json.overwrite : true,
-            drop: typeof json.drop === "boolean" ? json.drop : true
-        }
-    };
 }

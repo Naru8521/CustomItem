@@ -2,30 +2,24 @@ import { Player } from "@minecraft/server";
 import * as UI from "@minecraft/server-ui";
 import MenuForm from "./menu";
 import { customItemTypes } from "../config";
+import CustomItem from "../libs/CustomItem";
 
 /**
  * @param {Player} player 
  * @param {ItemConfig} itemConfig
  */
-export default async function TypeForm(player, itemConfig) {
+export default async function GenCommandForm(player, itemConfig) {
     // フォームを初期化
     const form = new UI.ModalFormData();
 
     // フォームを作成
-    form.title("タイプ変更");
-    form.dropdown("タイプ", customItemTypes, customItemTypes.findIndex(v => v === itemConfig.type));
-    form.submitButton("設定");
+    form.title("コマンド");
+    form.textField("コマンド", "", CustomItem.generateCommand(itemConfig));
+    form.submitButton("確認");
 
     // フォームを表示
     const { formValues, canceled } = await form.show(player);
 
     // フォームをキャンセルする
     if (canceled) return await MenuForm(player, itemConfig);
-
-    // itemConfigをセット
-    const type = customItemTypes[formValues[0]];
-    itemConfig = { ...itemConfig, type };
-
-    // メニューフォームへ戻る
-    await MenuForm(player, itemConfig);
 }

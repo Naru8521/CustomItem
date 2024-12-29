@@ -1,21 +1,11 @@
-import { Player } from "@minecraft/server";
-import * as config from "../config";
+import { Block, Entity, Player } from "@minecraft/server";
 
 /**
- * @param {Player} player
- * @param {string[]} args
+ * @param {string[]} args 
+ * @param {{ player: Player?, entity: Entity?, initiator: Entity?, block: Block? }} ev 
  */
-export function run(player, args) {
-    const prefix = config.commandConfig.prefix;
-    const ids = config.commandConfig.ids;
+export function run(args, ev) {
+    const { player, entity, initiator, block } = ev;
 
-    player.sendMessage([
-        `§bーー[ コマンドヘルプ ]ーー§f`,
-        `§eprefix§f: ${prefix}`,
-        `§eids§f: ${ids}`,
-        `§a${prefix} create§f - コマンドを生成する`,
-        `§a${prefix} edit <command | json>§f - コマンドまたはJSONを編集する`,
-        `§a${prefix} help§f - ヘルプを表示する`,
-        `§bーーーーーーーーーーーー§f`
-    ].join("\n"));
+    world.sendMessage("helpを実行しました");
 }

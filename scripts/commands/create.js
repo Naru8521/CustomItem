@@ -1,13 +1,14 @@
-import { Player, world } from "@minecraft/server";
+import { Block, Entity, Player } from "@minecraft/server";
 import MenuForm from "../forms/menu";
-import * as config from "../config";
 
 /**
- * @param {Player} player
- * @param {string[]} args
+ * @param {string[]} args 
+ * @param {{ player: Player?, entity: Entity?, initiator: Entity?, block: Block? }} ev 
  */
-export async function run(player, args) {
-    const preset = JSON.parse(JSON.stringify(config.presetConfig));
+export async function run(args, ev) {
+    const { player, entity, initiator, block } = ev;
 
-    await MenuForm(player, preset);
+    if (!player) return;
+
+    await MenuForm(player);
 }
