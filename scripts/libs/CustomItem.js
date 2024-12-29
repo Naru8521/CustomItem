@@ -10,7 +10,7 @@ export default class CustomItem {
         try {
             const obj = JSON.parse(objstr);
 
-            const type = customItemTypes.includes(obj.type) ? obj.type : "g:i";
+            const type = customItemTypes.includes(obj.type) ? obj.type : "gi";
             const id = obj.id ?? "";
             const nameTag = obj.nameTag ?? "";
             const lore = obj.lore ?? [];
@@ -23,7 +23,7 @@ export default class CustomItem {
             const lockMode = obj.lockMode ?? ItemLockMode.none;
             let newItemConfig = { type, id, nameTag, lore, amount, amounts, enchants, canPlaceOn, canDestory, keepOnDeath, lockMode };
 
-            if (type === "s:i") {
+            if (type === "si") {
                 const slot = obj.slot ?? 0;
                 const overwrite = obj.overwrite ?? false;
                 newItemConfig = { ...newItemConfig, slot, overwrite };

@@ -18,7 +18,7 @@ export default async function DetailForm(player, itemConfig) {
     form.dropdown("ロックモード", Object.values(ItemLockMode), Object.values(ItemLockMode).findIndex(value => value === itemConfig.lockMode));
     form.submitButton("設定");
 
-    if (itemConfig.type === "s:i") {
+    if (itemConfig.type === "si") {
         form.textField("セットスロット", "0", `${itemConfig.slot}`);
         form.toggle("上書き", itemConfig.overwrite);
     }
@@ -36,7 +36,7 @@ export default async function DetailForm(player, itemConfig) {
     const lockMode = Object.keys(ItemLockMode)[formValues[3]];
     itemConfig = { ...itemConfig, canPlaceOn, canDestory, keepOnDeath, lockMode };
 
-    if (itemConfig.type === "s:i") {
+    if (itemConfig.type === "si") {
         const slot = isNaN(Number(formValues[4])) ? 0 : Number(formValues[4]);
         const overwrite = formValues[5];
         itemConfig = { ...itemConfig, slot, overwrite };

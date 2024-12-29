@@ -34,9 +34,9 @@ export function run(args, ev) {
     }
 
     // アイテムの追加/設定
-    if (type === "g:i") {
+    if (type === "gi") {
         container.addItem(itemStack);
-    } else if (type === "s:i") {
+    } else if (type === "si") {
         const slotItem = container.getItem(slot);
         if (!overwrite && slotItem) return;
         container.setItem(slot, itemStack);
