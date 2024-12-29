@@ -1,5 +1,5 @@
 /**
- * @typedef {"g:i" | "s:i"} CustomItemType 
+ * @typedef {"gi" | "si"} CustomItemType 
  */
 
 /**

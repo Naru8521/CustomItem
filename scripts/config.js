@@ -27,13 +27,13 @@ export const commands = [
 
 /** @type {CustomItemType[]} */
 export const customItemTypes = [
-    "g:i",
-    "s:i"
+    "gi",
+    "si"
 ];
 
 /** @type {ItemConfig} */
 export const ItemConfigDef = {
-    type: "g:i",
+    type: "gi",
     id: "",
     nameTag: "",
     lore: [],
