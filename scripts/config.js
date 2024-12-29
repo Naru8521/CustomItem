@@ -22,9 +22,6 @@ export const commands = [
     {
         name: "run",
         tags: ["op"]
-    },
-    {
-        name: "help"
     }
 ];
 
