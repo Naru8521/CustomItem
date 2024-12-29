@@ -12,8 +12,8 @@ export default async function DetailForm(player, itemConfig) {
 
     // フォームを作成
     form.title("応用情報");
-    form.textField("置けるブロックID (,で区切る)", "minecraft:stone,minecraft:grass...", itemConfig.canPlaceOn.join(","));
-    form.textField("壊せるブロックID (,で区切る)", "minecraft:stone,minecraft:grass...", itemConfig.canDestory.join(","));
+    form.textField("設置可能ブロックIDs (,で区切る)", "minecraft:stone,minecraft:grass...", itemConfig.canPlaceOn.join(","));
+    form.textField("破壊可能ブロックIDs (,で区切る)", "minecraft:stone,minecraft:grass...", itemConfig.canDestory.join(","));
     form.toggle("死亡時にキープ", itemConfig.keepOnDeath);
     form.dropdown("ロックモード", Object.values(ItemLockMode), Object.values(ItemLockMode).findIndex(value => value === itemConfig.lockMode));
     form.submitButton("設定");
