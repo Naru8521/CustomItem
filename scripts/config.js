@@ -44,6 +44,6 @@ export const ItemConfigDef = {
     canDestory: [],
     keepOnDeath: false,
     lockMode: ItemLockMode.none,
-    slot: -1,
+    slot: 0,
     overwrite: false
 };
