@@ -56,7 +56,7 @@ export default class CustomItem {
         if (canDestory.length > 0) commands.push(`"canDestory":${JSON.stringify(canDestory)}`);
         if (keepOnDeath) commands.push(`"keepOnDeath":${keepOnDeath}`);
         if (lockMode !== "none") commands.push(`"lockMode":"${lockMode}"`);
-        if (type === "s:i") {
+        if (type === "si") {
             if (slot >= 0) commands.push(`"slot":${slot}`);
             if (overwrite) commands.push(`"overwrite":${overwrite}`);
         }
