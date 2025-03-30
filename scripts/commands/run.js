@@ -1,4 +1,4 @@
-import { Block, Entity, EntityComponentTypes } from "@minecraft/server";
+import { Block, Entity, EntityComponentTypes, system } from "@minecraft/server";
 import { config } from "../config";
 import commandManager from "../modules/CommandManager";
 import CustomItem from "../modules/CustomItem";
@@ -23,13 +23,17 @@ export default function loadRunCommand() {
     runCommand.onCommand((args, player) => {
         const command = args.command;
 
-        set(command, undefined, player, undefined);
+        system.run(() => {
+            set(command, undefined, player, undefined);
+        });
     });
 
     runCommand.onScriptCommand((args, initiator, sourceEntity, sourceBlock) => {
         const command = args.command;
 
-        set(command, initiator, sourceEntity, sourceBlock);
+        system.run(() => {
+            set(command, initiator, sourceEntity, sourceBlock);
+        });
     });
 
     runCommand.onCommandError((player, initiator, entity, block, errorType, message, extra) => {
