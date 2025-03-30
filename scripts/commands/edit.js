@@ -8,6 +8,7 @@ export default function loadEditCommand() {
     const editCommand = commandManager.register({
         prefixes: config.command.prefixes,
         ids: config.command.ids,
+        tags: config.command.tags,
         name: "edit",
         description: "アイテムを編集する",
         optionalArgs: [

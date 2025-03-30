@@ -5,7 +5,9 @@ import CustomItem from "../modules/CustomItem";
 
 export default function loadRunCommand() {
     const runCommand = commandManager.register({
+        prefixes: config.command.prefixes,
         ids: config.command.ids,
+        tags: config.command.tags,
         name: "run",
         description: "アイテムを与える",
         args: [

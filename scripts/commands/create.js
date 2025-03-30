@@ -6,6 +6,7 @@ export default function loadCreateCommand() {
     const createCommand = commandManager.register({
         prefixes: config.command.prefixes,
         ids: config.command.ids,
+        tags: config.command.tags,
         name: "create",
         description: "アイテムを作成する"
     });

@@ -3,7 +3,8 @@ import { ItemLockMode } from "@minecraft/server";
 export const config = {
     command: {
         prefixes: ["ci "],
-        ids: ["c:i"]
+        ids: ["c:i"],
+        tags: ["op"]
     }
 };
 
