@@ -1,14 +1,28 @@
-import { Block, Entity, Player } from "@minecraft/server";
-import MenuForm from "../forms/menu";
+import { config } from "../config";
+import MenuForm from "../forms/MenuForm";
+import commandManager from "../modules/CommandManager";
 
-/**
- * @param {string[]} args 
- * @param {{ player: Player?, entity: Entity?, initiator: Entity?, block: Block? }} ev 
- */
-export async function run(args, ev) {
-    const { player, entity, initiator, block } = ev;
+export default function loadCreateCommand() {
+    const createCommand = commandManager.register({
+        prefixes: config.command.prefixes,
+        ids: config.command.ids,
+        name: "create",
+        description: "アイテムを作成する"
+    });
 
-    if (!player) return;
+    console.log("load create command.");
 
-    await MenuForm(player);
+    createCommand.onCommand(async (args, player) => {
+        await MenuForm(player);
+    });
+
+    createCommand.onScriptCommand(async (args, initiator, sourceEntity, sourceBlock) => {
+        if (sourceEntity instanceof Player) {
+            await MenuForm(player);
+        }
+    });
+
+    createCommand.onCommandError((player, initiator, entity, block, errorType, message, extra) => {
+        console.error(message);
+    });
 }

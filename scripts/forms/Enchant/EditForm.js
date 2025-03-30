@@ -1,13 +1,15 @@
 import { EnchantmentTypes, Player } from "@minecraft/server";
 import * as UI from "@minecraft/server-ui";
-import EnchantsListForm from "./list";
+import EnchantsListForm from "./ListForm";
 
 /**
  * @param {Player} player 
- * @param {ItemConfig} itemConfig
+ * @param {Preset} preset 
  * @param {number} i 
  */
-export default async function EnchantsEditForm(player, itemConfig, i) {
+export default async function EnchantsEditForm(player, preset, i) {
+    let { itemConfig } = preset;
+
     // フォームを初期化
     const form = new UI.ModalFormData();
 
@@ -30,7 +32,7 @@ export default async function EnchantsEditForm(player, itemConfig, i) {
     const { formValues, canceled } = await form.show(player);
 
     // フォームをキャンセルする
-    if (canceled) return await EnchantsListForm(player, itemConfig);
+    if (canceled) return await EnchantsListForm(player, preset);
 
     if (formValues[1]) {
         // enchantsから削除
@@ -41,13 +43,15 @@ export default async function EnchantsEditForm(player, itemConfig, i) {
     }
 
     // リストを表示
-    await EnchantsListForm(player, itemConfig);
+    await EnchantsListForm(player, preset);
 }
 
 function createArray(maxLevel) {
     const levels = [];
+
     for (let i = 1; i <= maxLevel; i++) {
         levels.push(`${i}`);
     }
+
     return levels;
 }

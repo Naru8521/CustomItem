@@ -1,14 +1,16 @@
 import { Player } from "@minecraft/server";
 import * as UI from "@minecraft/server-ui";
-import MenuForm from "../menu";
-import EnchantsAddForm from "./add";
-import EnchantsEditForm from "./edit";
+import MenuForm from "../MenuForm";
+import EnchantsAddForm from "./AddForm";
+import EnchantsEditForm from "./EditForm";
 
 /**
  * @param {Player} player 
- * @param {ItemConfig} itemConfig
+ * @param {Preset} preset 
  */
-export default async function EnchantsListForm(player, itemConfig) {
+export default async function EnchantsListForm(player, preset) {
+    let { itemConfig } = preset;
+
     // フォームを初期化
     const form = new UI.ActionFormData();
 
@@ -16,6 +18,7 @@ export default async function EnchantsListForm(player, itemConfig) {
     form.title("エンチャントリスト");
     form.button("戻る");
     form.button("§b追加");
+
     for (const enchant of itemConfig.enchants) {
         form.button(enchant);
     }
@@ -24,10 +27,10 @@ export default async function EnchantsListForm(player, itemConfig) {
     const { selection, canceled } = await form.show(player);
 
     // フォームをキャンセルする
-    if (canceled) return await MenuForm(player, itemConfig);
+    if (canceled) return await MenuForm(player, preset);
 
     // ボタンが選択された時
-    if (selection === 0) return await MenuForm(player, itemConfig);
-    if (selection === 1) return await EnchantsAddForm(player, itemConfig);
-    await EnchantsEditForm(player, itemConfig, selection - 2);
+    if (selection === 0) return await MenuForm(player, preset);
+    if (selection === 1) return await EnchantsAddForm(player, preset);
+    await EnchantsEditForm(player, preset, selection - 2);
 }

@@ -1,7 +1,7 @@
 import { Block, Player, system, world } from "@minecraft/server";
 import * as UI from "@minecraft/server-ui";
 
-export class Util {
+export default class Util {
     /**
      * formを表示するのを待ちます
      * @param {Player} player - フォームを表示するプレイヤー

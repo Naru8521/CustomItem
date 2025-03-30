@@ -1,25 +1,26 @@
 import { Player } from "@minecraft/server";
 import * as UI from "@minecraft/server-ui";
-import MenuForm from "./menu";
-import { customItemTypes } from "../config";
-import CustomItem from "../libs/CustomItem";
+import CustomItem from "../modules/CustomItem";
+import MenuForm from "./MenuForm";
 
 /**
  * @param {Player} player 
- * @param {ItemConfig} itemConfig
+ * @param {Preset} preset 
  */
-export default async function GenCommandForm(player, itemConfig) {
+export default async function GenerateCommandForm(player, preset) {
+    const { itemConfig } = preset;
+
     // フォームを初期化
     const form = new UI.ModalFormData();
 
     // フォームを作成
-    form.title("コマンド");
+    form.title("コマンド生成");
     form.textField("コマンド", "", CustomItem.generateCommand(itemConfig));
-    form.submitButton("確認");
+    form.submitButton("戻る");
 
     // フォームを表示
     const { formValues, canceled } = await form.show(player);
 
-    // フォームをキャンセルする
-    if (canceled) return await MenuForm(player, itemConfig);
+    // メニューフォームへ戻る
+    await MenuForm(player, preset);
 }

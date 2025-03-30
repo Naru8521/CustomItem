@@ -1,4 +1,4 @@
-export class ObjectUtil {
+export default class ObjectUtil {
     /**
      * オブジェクトを複製します
      * @param {any} object 

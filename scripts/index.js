@@ -1,16 +1,10 @@
-import { system, world } from "@minecraft/server";
-import CommandHandler from "./libs/commandHandler";
-import { commands, commandSetting, commandsPath } from "./config";
+import { ItemStack, system, world } from "@minecraft/server";
+import loadCreateCommand from "./commands/create";
+import loadRunCommand from "./commands/run";
+import loadEditCommand from "./commands/edit";
 
-// コマンドハンドラーを初期化
-const commandHandler = new CommandHandler(commandsPath, commandSetting, commands);
-
-world.beforeEvents.chatSend.subscribe(ev => {
-    // コマンドをチェック
-    commandHandler.handleCommand(ev);
-});
-
-system.afterEvents.scriptEventReceive.subscribe(ev => {
-    // コマンドをチェック
-    commandHandler.handleCommand(ev);
+system.run(() => {
+    loadCreateCommand();
+    loadRunCommand();
+    loadEditCommand();
 });
