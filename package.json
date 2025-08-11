@@ -1,0 +1,21 @@
+{
+    "name": "bp",
+    "module": "index.ts",
+    "type": "module",
+    "scripts": {
+        "build": "tsc",
+        "postbuild": "javascript-obfuscator ./dist --output ./scripts --compact true --control-flow-flattening true"
+    },
+    "private": true,
+    "devDependencies": {
+        "@types/bun": "latest",
+        "javascript-obfuscator": "^4.1.1"
+    },
+    "peerDependencies": {
+        "typescript": "^5"
+    },
+    "dependencies": {
+        "@minecraft/server": "^2.1.0-beta.1.21.93-stable",
+        "@minecraft/server-ui": "^2.1.0-beta.1.21.93-stable"
+    }
+}
